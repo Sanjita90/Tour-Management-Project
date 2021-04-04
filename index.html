@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+    <meta charset="utf-8">
+    
+   <title>
+Webpage
+</title>
+<head></head>
+<body>
+    <div id="packages"></div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        async function getData(){
+       const data= await axios.get("http://localhost:3000/packages")
+       .then((res)=>{
+           console.log("data received")
+           console.log(res.data)
+           return res.data
+        })
+       .catch((err)=>console.log(err))
+       return data
+
+    }
+    const packages_list= getData().then((res)=>{return res}).catch((err)=>console.log(err))
+    console.log(packages_list)
+    </script>
+</html>
