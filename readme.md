@@ -7,6 +7,8 @@
     - express(npm)
 
 ## First of all, run "mongod dbpath <path to db folder>" to run the database
+ 
+## Then run npm install from the project directory.
 
 ## To run the server, from the api directory, run "node server.js"
 
