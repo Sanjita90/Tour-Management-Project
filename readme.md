@@ -10,9 +10,8 @@
     -multer (npm)
         multer is used to save uploaded image to the server
 
-## First of all, run "mongod dbpath <path to db folder>" to run the database
- 
 ## Then run npm install from the project directory.
+
 ## The database is located in mongo-cloud so no nedd to worry about running database on localhost
 
 ## Also, the uploaded image is saved in the uploads folder of the api directory of the backend
