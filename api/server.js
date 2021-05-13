@@ -7,18 +7,17 @@ const path = require('path')
 
 const Enquiries = require("../models/enquiries_model")
 const Packages = require("../models/packages_model")
-const localStorage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, "uploads/")
+const diskStorage=multer.diskStorage({
+    destination:function(req,file,cb){
+        cb(null,"./uploads/")
     },
-    filename: function (req, file, cb) {
-        cb(null, new Date().toISOString + " " + file.originalname)
+    filename: function(req,file,cb){
+        cb(null,file.originalname)
     }
 })
 
-const upload = multer({ destination: localStorage })
 
-
+const upload=multer({storage:diskStorage})
 const app = express()
 app.use(cors())
 app.use(express.json())
@@ -36,26 +35,24 @@ app.get('/packages', (req, res) => {
         })
 })
 
-
-app.post('/packages', upload.single("file"), (req, res) => {
-    console.log(req.file.originalname)
+app.post('/packages', upload.single('package_img'), (req, res) => {
+    console.log("File: "+req.file)
     const package = new Packages({
         _id: new mongoose.Types.ObjectId,
         destination: req.body.destination,
         price: req.body.price,
-        number_days: req.body.days,
-        image_url: req.body.image_link
+        number_days: req.body.number_days,
+        image_url: path.join(__dirname+"/"+req.file.filename)
     })
     package
         .save()
         .then(result => console.log(result))
         .catch(err => console.log(err))
     res.status(201).json({
-        message: "saving package",
-        createdPackage: package
+        message:"Saving package",
+        createdPackage:package
     })
 })
-
 
 app.get('/enquiries', (req, res) => {
     console.log("get enquiries")
