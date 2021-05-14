@@ -10,8 +10,11 @@
 </head>
 
 <body>
-    <div id="enquiries-display">
-        <table id="enquiries-table">
+    <div id="enquiries-display" class="enquiries_container">
+        <h1>Tour Management System Management dashboard</h1>
+        <hr /><br />
+        <h2>Enquiries</h2>
+        <table id="enquiries-table" class="enquiry_table">
             <thead>
                 <th>Name</th>
                 <th>Destination</th>
@@ -28,11 +31,15 @@
     <br /><br /><br />
     <button type="button" class="collapsed">Add Packages</button>
     <form enctype="multipart/form-data" method="POST" class="add-package" id="add-form">
-        <input placeholder="Package Destination" name="destination" type="text"><br><br>
+        <label style="margin-top: 20px;" for="Package_destination">Destination</label><br>
+        <input placeholder="Package_destination" name="destination" type="text" required><br><br>
+        <label style="margin-top: 20px;" for="price">Price</label><br>
         <input placeholder="Price" name="price" type="number"><br><br>
+        <label style="margin-top: 20px;" for="number_days">Number of Days</label><br>
         <input placeholder="Number of days" type="number" name="number_days"><br><br>
-        <input placeholder="Description" maxlength="200" name="description"
-            style="width: 200px; height: 150px;"><br><br>
+        <label style="margin-top: 20px;" for="description">Description</label><br>
+        <textarea placeholder="Description" maxlength="200" name="description"
+            style="width: 200px; height: 150px; "></textarea><br><br>
         <label for="package_img">Upload Image for package</label>
         <input type="file" name="package_img">
         <br><br>
@@ -40,12 +47,8 @@
     </form>
 
 
-    <!-- <div id="add-package">
-        <button id="add-pkg-btn" onclick="addPkgForm">Add Package</button><br><br>
-        
-    </div> -->
     <br /><br /><br />
-    <div id="packages">
+    <div id="packages" class="packages_list">
 
     </div>
 </body>
@@ -53,7 +56,23 @@
 <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-storage.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-analytics.js"></script>
+
+
 <script>
+    var firebaseConfig = {
+        apiKey: "AIzaSyBdcc_Y8oCfZVqt7ONYW3qiZyB329amTaA",
+        authDomain: "package-images.firebaseapp.com",
+        projectId: "package-images",
+        storageBucket: "package-images.appspot.com",
+        messagingSenderId: "510354842955",
+        appId: "1:510354842955:web:73dd6cbfcfecdde5af74ce",
+        measurementId: "G-8VVLV1V2CS"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    firebase.analytics();
+    var storage = firebase.storage();
+
     async function getData() {
         await axios.get("http://localhost:3000/enquiries")
             .then((res) => {
@@ -66,7 +85,7 @@
             })
             .catch((err) => console.log(err))
     }
-    getData()
+
     function createTable(data) {
         var table = document.getElementById('enquiries-table');
         var tbody = document.createElement('tbody');
@@ -119,7 +138,7 @@
     async function createTabulationPackages(data) {
         var storage = firebase.storage()
         for (var i = 0; i < data.length; i++) {
-            var currentitem=data[i]
+            var currentitem = data[i]
             var storageRef = storage.ref()
             var fileRef = storageRef.child(data[i].image_url)
             storageRef.child(data[i].image_url).getDownloadURL()
@@ -134,27 +153,29 @@
                     };
                     xhr.open('GET', url);
                     xhr.send();
-                    xhr.onreadystatechange=function(){
-                        if(this.readyState==4 &&this.status==200){
-                            var element = `<div class="contact-section" style="display: block;">
-                                <img src=${url} width="120dp" height="100dp" style="display: inline; float: left;" />
-                                <section style="margin-left: 100px;
-                                position: relative;
+                    xhr.onreadystatechange = function () {
+                        if (this.readyState == 4 && this.status == 200) {
+                            var element = `<div class="packageSection" >
+                                <img src=${url} width="120px" height="100px"  style="display: block; float: left;" />
+                                <section style="position: relative;
                                 display: block;
                                 margin-left: 150px; ">
-                                    <li class="list__item" style="list-style: none; float: left;">
-                                        <p class="destination"><b>Destination:</b> ${currentitem.destination}</p>
-                                        <p class="price"><b>Price:</b>${currentitem.price}</p>
+                                    <li class="list__item" style="list-style: none; margin-left:auto; float: left; ">
+                                        <h3 class="destination"> <b>Destination: </b>${currentitem.destination}</h3>
+                                        <h3 class="price"><b>Price: </b>${currentitem.price}</h3>
+                                        <h3 class="price"><b>Number of Days: </b>${currentitem.number_days}</h3>
+                                        <h3 class="price"><b>Description: </b>${currentitem.description}</h3>
                                     </li>
                                 </section>
-                                <button type="button"
-                                    style="display: block; float: right; position: relative; margin-right:50dp; margin-top: 20px;">Delete
+                                <button type="button" id=${currentitem._id}
+                                    style=" float: right; position: relative; margin-right:50dp; margin-top: 20px;">Delete
                                     package</button>
-                    </div>`
-                    packages.innerHTML+=element
+                    </div><br><br><br>`
+                            packages.innerHTML += element
+
                         }
                     }
-                    
+
                 }).catch((error) => {
                     // A full list of error codes is available at
                     // https://firebase.google.com/docs/storage/web/handle-errors
@@ -163,61 +184,19 @@
                             console.log("object not found")
                         case 'storage/unauthorized':
                             console.log("access milena")
-                            ;
+                                ;
                         case 'storage/canceled':
                             console.log("cancelled")
-                            // User canceled the upload
+                        // User canceled the upload
 
                         // ...
 
                         case 'storage/unknown':
                             console.log("unknown response")
-                            // Unknown error occurred, inspect the server response
+                        // Unknown error occurred, inspect the server response
                     }
                 });
-    }
-}
-
-        //         function createElement(data,url,index){
-        //             console.log(index,url)
-        //             
-                    
-        //         }
-        // }
-
-        const card = `<div class="card">
-		<img src="images/mustang.jpg" alt="">
-		<div class="content">
-			<h2 class="title">Mustang</h2>
-			<p>Rs.8000/person</p>
-			<div>
-				<i class="fas fa-hotel">hotel himalaya</i>
-				<i class="fas fa-sun">5 Days</i>
-				 <i class= "fas fa-moon"></i>4 night</span>
-			</div>
-			<p>La Casa de los Espíritus, de la autora Isabel Allende, es una obra. </p>
-			
-			<div class="stars">
-				<i class="fas fa-star"></i>
-				<i class="fas fa-star"></i>
-				<i class="fas fa-star"></i>
-				<i class="fas fa-star"></i>
-				<i class="fas fa-star"></i>
-			</div>
-			<a href="inquiry.html"><button class="btn">book now</button></a>
-		</div>
-		
-	</div>`
-        // packages.innerHTML+=card;
-    
-    function addPkgForm() {
-        const content = document.getElementById("contents")
-        const form = document.createElement('form')
-        content.appendChild(form)
-        const formdata = ``
-        form.insertAdjacentHTML("afterbegin", formdata)
-        content.innerHTML = form
-
+        }
     }
 
     var coll = document.getElementsByClassName("collapsed");
@@ -242,23 +221,14 @@
             .catch((err) => console.log(err))
     })
 
-    var firebaseConfig = {
-        apiKey: "AIzaSyBdcc_Y8oCfZVqt7ONYW3qiZyB329amTaA",
-        authDomain: "package-images.firebaseapp.com",
-        projectId: "package-images",
-        storageBucket: "package-images.appspot.com",
-        messagingSenderId: "510354842955",
-        appId: "1:510354842955:web:73dd6cbfcfecdde5af74ce",
-        measurementId: "G-8VVLV1V2CS"
-    };
+    var deletePkgBtn = document.getElementById('packages').addEventListener('click', async (e) => {
+        console.log("clicked: " + e.target.id)
+        var id = e.target.id
+        await axios.delete("http://localhost:3000/packages/" + id)
+            .then((res) => { location.reload(); }).catch((err) => console.log(err))
+    })
 
-    firebase.initializeApp(firebaseConfig);
-    firebase.analytics();
-    var storage = firebase.storage();
-
-
-
-
+    getData()
 
 </script>
 

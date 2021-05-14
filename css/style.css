@@ -698,11 +698,13 @@ form .btn input[type="submit"] {
 }
 
 .collapsed {
+  border-radius: 10px;
   background-color: #eee;
   color: #444;
   cursor: pointer;
   padding: 18px;
-  width: 100%;
+  width: 80%;
+  margin: 0px 10%;
   border: none;
   text-align: left;
   outline: none;
@@ -718,6 +720,9 @@ form .btn input[type="submit"] {
 /* Style the collapsible content. Note: hidden by default */
 
 .add-package {
+  border-radius: 10px;
+  width: 80%;
+  margin: 0px 10%;
   padding: 0 18px;
   display: none;
   overflow: hidden;
@@ -725,6 +730,10 @@ form .btn input[type="submit"] {
   background-color: #f1f1f1;
   transition: max-height 1s ease;
 }
+ .add-package input{
+   width: 50%;
+   margin: auto;
+ }
 
 .collapsed:after {
   content: '\02795';
@@ -738,4 +747,71 @@ form .btn input[type="submit"] {
 .collapsed.active:after {
   content: "\2796";
   /* Unicode character for "minus" sign (-) */
+}
+
+.packages_list {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  float: down;
+}
+.packages_list div{
+  height: 120px;
+
+}
+
+.enquiry_table{
+  background-color: #f1f1f1;
+  border: 1px solid black;
+  width: 80%;
+  margin: 10px auto;
+}
+.enquiry_table th{
+  border-right: 1px solid black;
+}
+
+.enquiries_container h1{
+text-align: center;
+  width: 80%;
+  margin: 10px auto;
+}
+
+.enquiries_container h2{
+    font-size: large;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-style:oblique;
+    text-align: center;
+    width: 80%;
+    margin: 0px auto ;
+  }
+
+  .packages_list{
+    background-color: #f1f1f1;
+    border-radius: 10px;
+    width: 80%;
+    margin: auto;
+  }
+
+  .packages_list img{
+    border-radius: 10px;
+    margin:5px;
+  }
+
+.packages_list li{
+  margin-top: 10px;
+  float: left;
+  width:min-content
+  height: max-content;
+}
+ .packages_list h3{
+   font-style: oblique;
+   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+   font-size: 15px;
+   display: block;
+ }
+
+
+.packages_list button{
+  margin-right:10px ;
 }
