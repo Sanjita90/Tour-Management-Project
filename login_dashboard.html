@@ -143,9 +143,6 @@
             var fileRef = storageRef.child(data[i].image_url)
             storageRef.child(data[i].image_url).getDownloadURL()
                 .then((url) => {
-                    // `url` is the download URL for 'images/stars.jpg'
-
-                    // This can be downloaded directly:
                     var xhr = new XMLHttpRequest();
                     xhr.responseType = 'blob';
                     xhr.onload = (event) => {

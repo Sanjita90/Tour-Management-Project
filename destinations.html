@@ -34,9 +34,9 @@
 
 	<section class="feature" id="top destination">
 		<h1 class="heading"><span>Destinations</span></h1>
-		<div class="card-container">
+		<div class="card-container" id="packages_card_container">
 
-			<!-- <div class="card">
+			<div class="card">
 		
 		<img src="images/mustang.jpg" alt="">
 		<div class="content">
@@ -59,132 +59,9 @@
 			<a href="inquiry.html"><button class="btn">book now</button></a>
 		</div>
 		
-	</div> -->
-
-			<!-- <div class="card">
-		<img src="images/manang.jpg" alt="">
-		<div class="content">
-			<h2 class="title">Manang</h2>
-			<p>Rs.5000/person</p>
-			<div>
-				<i class="fas fa-hotel">Hotel al</i>
-				<i class="fas fa-sun">3 Days</i>
-				 <i class= "fas fa-moon"></i>2 night</span>
-			</div>
-			<p>La Casa de los Espíritus, de la autora Isabel Allende, es una obra . </p>
-			<div class="stars">
-				<i class="fas fa-star"></i>
-				<i class="fas fa-star"></i>
-				<i class="fas fa-star"></i>
-				<i class="fas fa-star-half-alt"></i>
-				<i class="fas fa-star-half-alt"></i>
-			</div>
-			<a href="inquiry.html"><button class="btn">book now</button></a>
-		</div>
-		
-	</div>
-	<div class="card">
-		
-		<img src="images/kathmandu.jpg" alt="">
-		<div class="content">
-			<h2 class="title">Kathmandu</h2>
-			<p>Rs.9,000/person</p>
-			<div>
-				<i class="fas fa-hotel">Summit </i>
-				<i class="fas fa-sun">6 Days</i>
-				 <i class= "fas fa-moon"></i>5 night</span>
-			</div>
-			<p>La Casa de los Espíritus, de la autora Isabel Allende, es una obra. </p>
-			<div class="stars">
-				<i class="fas fa-star"></i>
-				<i class="fas fa-star"></i>
-				<i class="fas fa-star-half-alt"></i>
-				<i class="fas fa-star-half-alt"></i>
-				<i class="fas fa-star-half-alt"></i>
-			</div>
-			<a href="inquiry.html"><button class="btn">book now</button></a>
-		</div>
-		
 	</div>
 
-<div class="card">
-		
-		<img src="images/nagarkot.jpg" alt="">
-		<div class="content">
-			<h2 class="title">nagarkot</h2>
-			<p>Rs.3000/person</p>
-			<div>
-				<i class="fas fa-hotel">hotel Rara</i>
-				<i class="fas fa-sun">2 Days</i>
-				 <i class= "fas fa-moon"></i>1 night</span>
-			</div>
-			<p>La Casa de los Espíritus, de la autora Isabel Allende, es una obra. </p>
-			
-			<div class="stars">
-				<i class="fas fa-star"></i>
-				<i class="fas fa-star"></i>
-				<i class="fas fa-star"></i>
-				<i class="fas fa-star"></i>
-				<i class="fas fa-star"></i>
-			</div>
-			<a href="inquiry.html"><button class="btn">book now</button></a>
 		</div>
-		
-	</div>
-
-	<div class="card">
-		<img src="images/rara.jpg" alt="">
-		<div class="content">
-			<h2 class="title">Rara</h2>
-			<p>Rs.15,000/person</p>
-			<div>
-				<i class="fas fa-hotel">Hotel rara</i>
-				<i class="fas fa-sun">7 Days</i>
-				 <i class= "fas fa-moon"></i>6 night</span>
-			</div>
-			<p>La Casa de los Espíritus, de la autora Isabel Allende, es una obra . </p>
-			<div class="stars">
-				<i class="fas fa-star"></i>
-				<i class="fas fa-star"></i>
-				<i class="fas fa-star"></i>
-				<i class="fas fa-star-half-alt"></i>
-				<i class="fas fa-star-half-alt"></i>
-			</div>
-			<a href="inquiry.html"><button class="btn">book now</button></a>
-		</div>
-		
-	</div>
-	<div class="card">
-		
-		<img src="images/chitwan.jpg" alt="">
-		<div class="content">
-			<h2 class="title">Chitwan</h2>
-			<p>Rs.8,000/person</p>
-			<div>
-				<i class="fas fa-hotel">Hotel riverside</i>
-				<i class="fas fa-sun">6 Days</i>
-				 <i class= "fas fa-moon"></i>5 night</span>
-			</div>
-			<p>La Casa de los Espíritus, de la autora Isabel Allende, es una obra. </p>
-			<div class="stars">
-				<i class="fas fa-star"></i>
-				<i class="fas fa-star"></i>
-				<i class="fas fa-star-half-alt"></i>
-				<i class="fas fa-star-half-alt"></i>
-				<i class="fas fa-star-half-alt"></i>
-			</div>
-			<a href="inquiry.html"><button class="btn">book now</button></a>
-		</div> -->
-
-		</div>
-
-
-
-
-
-
-
-		<!-- </div> -->
 
 	</section>
 
@@ -243,8 +120,8 @@
 
 		async function createTabulationPackages(data) {
 			console.log("Data reveived for tabulation"+data[0].destination)
-			const packages=document.getElementsByClassName("card-container")
 			var storage = firebase.storage()
+			var packages=document.getElementById("packages_card_container")
 			for (var i = 0; i < data.length; i++) {
 				var currentitem = data[i]
 				var storageRef = storage.ref()
@@ -264,12 +141,12 @@
 								var element = `<div class="card">		
 									<img src=${url} alt="">
 									<div class="content">
-										<h2 class="title">Chitwan</h2>
-										<p>Rs.8,000/person</p>
+										<h2 class="title">${currentitem.destination}</h2>
+										<p>Rs.${currentitem.price}/person</p>
 										<div>
-											<i class="fas fa-hotel">Hotel riverside</i>
-											<i class="fas fa-sun">6 Days</i>
-											<i class= "fas fa-moon"></i>5 night</span>
+											<i class="fas fa-hotel">${currentitem.hotel}</i>
+											<i class="fas fa-sun">${currentitem.number_days}</i>
+											<i class= "fas fa-moon"></i>${currentitem.number_nights}</span>
 										</div>
 										<p>La Casa de los Espíritus, de la autora Isabel Allende, es una obra. </p>
 										<div class="stars">
@@ -279,9 +156,11 @@
 											<i class="fas fa-star-half-alt"></i>
 											<i class="fas fa-star-half-alt"></i>
 										</div>
-										<a href="inquiry.html"><button class="btn">book now</button></a>
+										<button class="btn">book now</button>
 									</div> `
+									console.log("element created")
 								packages.innerHTML += element
+
 
 							}
 						}
