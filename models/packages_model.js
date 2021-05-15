@@ -5,7 +5,9 @@ const package=mongoose.Schema({
     destination:String,
     price:Number,
     number_days:Number,
-    image_url:String
+    numer_nights:Number,
+    image_url:String,
+    description:String
 })
 
 module.exports=mongoose.model("Package",package)
