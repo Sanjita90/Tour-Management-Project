@@ -98,7 +98,7 @@
             const destination = document.createElement('td')
             destination.innerText = data[i].destination
             const address = document.createElement('td')
-            address.innerText = data[i].district + " " + data[i].city
+            address.innerText = data[i].country + "," + data[i].city
             const contact = document.createElement('td')
             contact.innerText = data[i].contact
             const email = document.createElement('td')
@@ -130,7 +130,9 @@
                 const id = e.target.id
                 console.log(id)
                 await axios.delete("http://localhost:3000/enquiries/" + id)
-                    .then((res) => location.reload()).catch((err) => console.log(err))
+                    .then((res) => {
+                        window.alert("Delete Success")
+                        location.reload()}).catch((err) => console.log(err))
             })
         }
     }
@@ -217,12 +219,14 @@
             .then((res) => window.alert("Post Success"))
             .catch((err) => console.log(err))
     })
-
     var deletePkgBtn = document.getElementById('packages').addEventListener('click', async (e) => {
         console.log("clicked: " + e.target.id)
         var id = e.target.id
         await axios.delete("http://localhost:3000/packages/" + id)
-            .then((res) => { location.reload(); }).catch((err) => console.log(err))
+            .then((res) => { 
+                window.alert("Delete Success")
+                location.reload(); })
+                .catch((err) => console.log(err))
     })
 
     getData()
