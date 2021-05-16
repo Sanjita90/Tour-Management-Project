@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Tours and Travel </title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+	<link rel="stylesheet" href="css/style.css">
+
+</head>
+
+<body>
+	<!---------------------------------headersection-->
+	<header>
+		<a href="#" class="logo">tours and travel</a>
+		<nav class="navbar">
+			<ul>
+				<li><a href="index.html" class="active">home</a></li>
+				<li><a href="destinations.html">destinations</a></li>
+				<li><a href="inquiry.html">inquiry</a></li>
+				<li><a href="login.html">login</a></li>
+			</ul>
+		</nav>
+		<div class="fas fa-bars"></div>
+	</header>
+	<!---------------------Features starts----------------->
+
+	<section class="feature" id="top destination">
+		<h1 class="heading"><span>Destinations</span></h1>
+		<div class="card-container" id="packages_card_container">
+		</div>
+		<div id="myModal" class="modal">
+			<div class="modal-content">
+				<span class="close">&times;</span>
+				<div class="inputBox">
+					<h1>Enquire About Package</h1>
+					<h2 id="destination_name" style="font-style:bold;"> </h2>
+					<p>Please enter the details below to post enquiry. Our representatives will contact you soon</p><br>
+					<form id="form">
+						<input name="destination" id="destination" style="display: none;">
+						<label for="name">Enter Your Full Name <b style="color: red;">*</b></label><br>
+						<input type="text" name="name" placeholder="full name " required><br><br>
+						<label for="address">Address</label><br>
+						<input type="text" name="country" placeholder="country">
+						<input type="text" name="city" placeholder="city"><br><br>
+						<label for="email">Email; <b style="color: red;">*</b></label><br>
+						<input type="email" name="email" placeholder="your e-mail" required><br><br>
+						<label for="fullname">Phone Number <b style="color: red;">*</b></label><br>
+						<input type="number" name="contact_no" placeholder="your phone number" required><br><br>
+						<label for="no_of_people" >Number of People <b style="color: red;">*</b></label><br>
+						<input type="number"  name="no_of_people"  required><br><br>
+						<label for="comments">If you have extra comments: <b style="color: red;">(optional)</b>500
+							characters</label><br>
+						<textarea maxlength="500" name="comments" style="height: 100px;"></textarea><br><br>
+						<button type="submit" id="submit_enquiry">Submit</button>
+					</form>
+				</div>
+			</div>
+
+	</section>
+	<!-------------footer----------->
+	<section class="footer">
+		<h1 class="credit">copyright @ 2021 Tour and travel, all rights reserved.</h1>
+		<div class="icons">
+			<a href="#" class="fab fa-facebook-f"></a>
+			<a href="#" class="fab fa-twitter"></a>
+			<a href="#" class="fab fa-instagram"></a>
+		</div>
+	</section>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<script src="js/main.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-storage.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-analytics.js"></script>
+	<script>
+		var firebaseConfig = {
+			apiKey: "AIzaSyBdcc_Y8oCfZVqt7ONYW3qiZyB329amTaA",
+			authDomain: "package-images.firebaseapp.com",
+			projectId: "package-images",
+			storageBucket: "package-images.appspot.com",
+			messagingSenderId: "510354842955",
+			appId: "1:510354842955:web:73dd6cbfcfecdde5af74ce",
+			measurementId: "G-8VVLV1V2CS"
+		};
+		firebase.initializeApp(firebaseConfig);
+		firebase.analytics();
+		async function getData() {
+			await axios.get("http://localhost:3000/api/packages")
+				.then((res) => {
+					createTabulationPackages(res.data)
+				})
+				.catch((err) => console.log(err))
+		}
+		getData()
+		async function createTabulationPackages(data) {
+			console.log("Data reveived for tabulation" + data[0].destination)
+			var storage = firebase.storage()
+			var packages = document.getElementById("packages_card_container")
+			for (var i = 0; i < data.length; i++) {
+				var currentitem = data[i]
+				var storageRef = storage.ref()
+				var fileRef = storageRef.child(data[i].image_url)
+				await storageRef.child(data[i].image_url).getDownloadURL()
+					.then((url) => {
+						var xhr = new XMLHttpRequest();
+						xhr.responseType = 'blob';
+						xhr.onload = (event) => {
+							var blob = xhr.response;
+						};
+						xhr.open('GET', url);
+						xhr.send();
+								var element = `<div class="card">		
+									<img src=${url} alt="">
+									<div class="content">
+										<h2 class="title">${currentitem.destination}</h2>
+										<p>Rs.${currentitem.price}/person</p>
+										<div>
+											<i class="fas fa-hotel">${currentitem.hotel}</i>
+											<i class="fas fa-sun">${currentitem.number_days}</i>
+											<i class= "fas fa-moon"></i>${currentitem.number_nights}</span>
+										</div>
+										<p>${currentitem.description} </p>
+										<div class="stars">
+											<i class="fas fa-star"></i>
+											<i class="fas fa-star"></i>
+											<i class="fas fa-star-half-alt"></i>
+											<i class="fas fa-star-half-alt"></i>
+											<i class="fas fa-star-half-alt"></i>
+										</div>
+										<div id="enquire_btn_container">
+										<button class="btn" id=${currentitem._id}>book now</button>
+										</div>
+									</div> `
+								console.log("element created")
+								packages.innerHTML += element
+								addListener(currentitem._id)
+					}).catch((error) => {
+						switch (error.code) {
+							case 'storage/object-not-found':
+								console.log("object not found")
+							case 'storage/unauthorized':
+								console.log("access milena");
+							case 'storage/canceled':
+								console.log("cancelled")
+							case 'storage/unknown':
+								console.log("unknown response")
+						}
+					});
+			}
+		}
+		function addListener(id) {
+			const enquirePackageBtn = document.getElementById(id)
+			console.log(typeof ("clicked btn: " + id))
+			enquirePackageBtn.addEventListener("click", async (e) => {
+				var id = e.target.id
+				var span = document.getElementsByClassName("close")[0];
+				await axios.get("http://localhost:3000/api/packages/" + id)
+					.then((res) => {
+						var pkg_destination = res.data.destination
+						var destination_input = document.getElementById("destination")
+						destination_input.value = pkg_destination
+						var destination_field = document.getElementById("destination_name")
+						destination_field.innerHTML = ""
+						destination_field.innerHTML += `Destination: <strong style="font-style:bold;">${pkg_destination}</strong>`
+					})
+					.catch((err) => console.log(err))
+				var modal = document.getElementById("myModal");
+				modal.style.display = "block";
+				span.onclick = function () {
+					modal.style.display = "none";
+				}
+				window.onclick = function (event) {
+					if (event.target == modal) {
+						modal.style.display = "none";
+					}
+				}
+
+
+			})
+			var submit_pkg_form = document.getElementById('form')
+			submit_pkg_form.addEventListener('submit', async (event) => {
+				window.alert("Submit")
+				event.preventDefault()
+				var etarget=event.target
+				var data={
+					name: etarget.name.value,
+					destination:etarget.destination.value,
+					comments:etarget.comments.value,
+					no_of_people:etarget.no_of_people.value,
+					country:etarget.country.value,
+					city:etarget.city.value,
+					contact:etarget.contact_no.value,
+					email:etarget.email.value
+				}
+				await axios.post("http://localhost:3000/api/enquiries", data)
+					.then((res) => window.alert("Post Success"))
+					.catch((err) => console.log(err))
+			})
+		}
+
+	</script>
+
+</html>
+</body>
+
+</html>
